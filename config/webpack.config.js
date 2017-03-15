@@ -19,7 +19,12 @@ const webpackConfig = {
     root       : project.paths.client(),
     extensions : ['', '.js', '.jsx', '.json']
   },
-  module : {}
+  module : {},
+  node: {
+    fs: 'empty',
+    net: 'empty',
+    tls: 'empty'
+  }
 }
 // ------------------------------------
 // Entry Points

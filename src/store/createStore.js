@@ -3,8 +3,9 @@ import thunk from 'redux-thunk'
 import { browserHistory } from 'react-router'
 import makeRootReducer from './reducers'
 import { updateLocation } from './location'
+import initialState from './initialState'
 
-export default (initialState = {}) => {
+export default (initialState = initialState) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================
