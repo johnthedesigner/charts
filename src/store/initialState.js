@@ -1,6 +1,12 @@
 export const initialState = {
-  files: {
-    data: {},
-    selectionIndices: []
+  Files: {
+    data: {
+      columns: [],
+      rows: []
+    },
+    selection: {
+      indices: [],
+      rows: []
+    },
   }
 }

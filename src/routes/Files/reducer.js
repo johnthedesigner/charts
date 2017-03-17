@@ -10,25 +10,28 @@ export default function reviews(state = {}, action) {
   switch (action.type) {
     case FETCHING_FILE:
       consoleGroup('FETCHING_FILE',[action])
-      return Object.assign({},state,{ // Merge new review into state tree
-        data: {},
-        selectionIndices: state.selectionIndices,
+      return Object.assign({},state,{
+        data: state.data,
+        selection: state.selection,
         isLoading: true
       })
 
     case STORE_FILE_DATA:
       consoleGroup('STORE_FILE_DATA',[action])
-      return Object.assign({},state,{ // Merge new review into state tree
+      return Object.assign({},state,{
         data: action.data,
-        selectionIndices: [],
+        selection: {
+          indices: [],
+          rows: []
+        },
         isLoading: false
       })
 
     case UPDATE_SELECTION_INDICES:
       consoleGroup('UPDATE_SELECTION_INDICES',[action])
-      return Object.assign({},state,{ // Merge new review into state tree
+      return Object.assign({},state,{
         data: state.data,
-        selectionIndices: action.selectionIndices,
+        selection: action.selection,
         isLoading: false
       })
 

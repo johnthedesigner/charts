@@ -13,7 +13,7 @@ class DataView extends React.Component {
       importFile,
       updateSelectionIndices,
       data,
-      selectionIndices
+      selection
     } = this.props
 
     function dropFile(files) {
@@ -25,11 +25,11 @@ class DataView extends React.Component {
     }
 
     let DataViewer = null
-    if (data && data[0]) {
+    if (data && data.rows) {
       DataViewer = <DataGrid
         data={data}
-        updateSelectionIndices={updateSelectionIndices}
-        selectionIndices={selectionIndices}/>
+        selection={selection}
+        updateSelectionIndices={updateSelectionIndices}/>
     } else {
       DataViewer = <p>No data to display</p>
     }

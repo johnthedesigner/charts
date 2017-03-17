@@ -5,7 +5,7 @@ import makeRootReducer from './reducers'
 import { updateLocation } from './location'
 import initialState from './initialState'
 
-export default (initialState = initialState) => {
+export default (initialState) => {
   // ======================================================
   // Middleware Configuration
   // ======================================================

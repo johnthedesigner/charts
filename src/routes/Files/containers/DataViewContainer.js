@@ -2,20 +2,7 @@ import { connect } from 'react-redux'
 
 import { fetchAndParseFile, updateSelectionIndices } from '../actions'
 import DataView from '../components/DataView'
-
-function mapRows(data) {
-  if (data) {
-    let keys = Object.keys(data)
-    let rows = keys.map(function(key) {
-      let row = data[key]
-      row.id = key
-      return row
-    })
-    return rows
-  } else {
-    return []
-  }
-}
+import initialState from '../../../store/initialState'
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -29,8 +16,8 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const mapStateToProps = (state) => ({
-  data: mapRows(state.Files.data),
-  selectionIndices: state.Files.selectionIndices
+  data: state.Files.data,
+  selection: state.Files.selection
 })
 
 const DataViewContainer = connect(

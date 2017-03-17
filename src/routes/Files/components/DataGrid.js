@@ -8,45 +8,41 @@ class DataView extends React.Component {
     super()
   }
 
-  mapColumns = (firstRow) => {
-    let keys = Object.keys(firstRow)
-    let columns = keys.map(function(obj) {
-      let column = {
-        key: obj,
-        name: obj
-      }
-      return column
-    })
-    return columns
-  }
-
   rowGetter = (index) => {
     if (index < 0 || index > this.rowsCount()) {
       return undefined
     }
-    return this.props.data[index]
+    return this.props.data.rows[index]
   }
 
   rowsCount = () => {
-    return this.props.data.length;
+    return this.props.data.rows.length;
   }
 
   rowSelection = (selection) => {
-    let newIndex = _.map(selection, (o)=>{return o.rowIdx})
-    let indices = [...this.props.selectionIndices, ...newIndex]
-    this.props.updateSelectionIndices(indices)
+    console.log(selection)
+    let newIndices = _.map(selection, (o)=>{return o.rowIdx})
+    let newRows = _.map(selection, (o)=>{return o.row})
+    let newSelection = {
+      indices: [...this.props.selection.indices, ...newIndices],
+      rows: [...this.props.selection.rows, ...newRows]
+    }
+    this.props.updateSelectionIndices(newSelection)
   }
 
   rowDeselection = (selection) => {
-    let removeIndex = _.map(selection, (o)=>{return o.rowIdx})
-    console.log('selectionIndices', this.props.selectionIndices)
-    console.log('removeIndex', removeIndex)
-    let indices = _.pull(this.props.selectionIndices, ...removeIndex)
-    this.props.updateSelectionIndices(indices)
+    let removeIndices = _.map(selection, (o)=>{return o.rowIdx})
+    let removeRow = _.map(selection, (o)=>{return o.row})
+    let newSelection = {
+      indices: _.pull(this.props.selection.indices, ...removeIndices),
+      rows: _.pull(this.props.selection.rows, ...removeRow)
+
+    }
+    this.props.updateSelectionIndices(newSelection)
   }
 
   render() {
-    const { data, selectionIndices } = this.props
+    const { data, selection } = this.props
 
     return (
       <div>
@@ -56,14 +52,14 @@ class DataView extends React.Component {
         rowsCount={this.rowsCount()}
         enableRowSelect={true}
         enableCellSelect={false}
-        columns={this.mapColumns(data[0])}
+        columns={data.columns}
         rowSelection={{
           showCheckbox: true,
           enableShiftSelect: false,
           onRowsSelected: this.rowSelection,
           onRowsDeselected: this.rowDeselection,
           selectBy: {
-            indexes: selectionIndices
+            indexes: selection.indices
           }
         }}/>
       </div>

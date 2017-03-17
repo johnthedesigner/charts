@@ -4,6 +4,7 @@ import CSV from 'babyparse'
 import { consoleGroup } from '../../utils/utils'
 import {
   FETCHING_FILE,
+  FILE_PARSE_ERROR,
   STORE_FILE_DATA,
   UPDATE_SELECTION_INDICES,
 } from './constants'
@@ -21,20 +22,45 @@ export function storeFileData(data) {
   }
 }
 
-export function fetchAndParseFile(unparsedData, headerRow) {
-  return dispatch => {
-    dispatch(fetchingFile())
-    let parsed = CSV.parse(unparsedData, { header: headerRow })
-    let results = {}
-    if (parsed.errors.length > 0) results = parsed.errors
-    if (parsed.data.length > 0) results = parsed.data
-    dispatch(storeFileData(results))
+export function fileParseError() {
+  return {
+    type: FILE_PARSE_ERROR
   }
 }
 
-export function updateSelectionIndices(selectionIndices) {
+export function fetchAndParseFile(unparsedData, headerRow) {
+  function buildDataset(data) {
+    let columnKeys = Object.keys(data[0])
+    let columns = columnKeys.map(function(obj) {
+      let column = {
+        key: obj,
+        name: obj
+      }
+      return column
+    })
+    let rowKeys = Object.keys(data)
+    let rows = rowKeys.map(function(key) {
+      let row = data[key]
+      row.id = key
+      return row
+    })
+    return {
+      columns,
+      rows
+    }
+  }
+  return dispatch => {
+    dispatch(fetchingFile())
+    let json = CSV.parse(unparsedData, { header: headerRow })
+    if (json.errors.length > 0) dispatch(fileParseError(json.errors))
+    let dataset = buildDataset(json.data)
+    dispatch(storeFileData(dataset))
+  }
+}
+
+export function updateSelectionIndices(selection) {
   return {
     type: UPDATE_SELECTION_INDICES,
-    selectionIndices
+    selection
   }
 }
